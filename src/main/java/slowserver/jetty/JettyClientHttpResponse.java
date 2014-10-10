@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+ */
+package slowserver.jetty;
+
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.http.HttpField;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.AbstractClientHttpResponse;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static java.util.Collections.singletonList;
+import static org.springframework.util.Assert.notNull;
+
+/**
+ */
+public class JettyClientHttpResponse extends AbstractClientHttpResponse {
+
+    private final ContentResponse response;
+
+    JettyClientHttpResponse(final ContentResponse response) {
+        notNull(response, "httpMethod can't be null");
+        this.response = response;
+    }
+
+    @Override
+    public int getRawStatusCode() throws IOException {
+        return response.getStatus();
+    }
+
+    @Override
+    public String getStatusText() throws IOException {
+        return response.getReason();
+    }
+
+    @Override
+    public void close() {
+    }
+
+    @Override
+    public InputStream getBody() throws IOException {
+        return new ByteArrayInputStream(response.getContent());
+    }
+
+    @Override
+    public HttpHeaders getHeaders() {
+        final HttpHeaders headers = new HttpHeaders();
+        for (final HttpField header: response.getHeaders()) {
+            headers.put(header.getName(), singletonList(header.getValue())); // todo multivalue headers
+        }
+        return headers;
+    }
+}
