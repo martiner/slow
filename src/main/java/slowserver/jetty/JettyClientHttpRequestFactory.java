@@ -3,8 +3,8 @@
  */
 package slowserver.jetty;
 
+import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.api.Request;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpMethod;
@@ -32,10 +32,11 @@ public class JettyClientHttpRequestFactory implements ClientHttpRequestFactory, 
 
     @Override
     public ClientHttpRequest createRequest(final URI uri, final HttpMethod httpMethod) throws IOException {
-        final Request request = httpClient.newRequest(uri)
-                .method(httpMethod.toString());
+        final ContentExchange request = new ContentExchange();
+        request.setURI(uri);
+        request.setMethod(httpMethod.toString());
         if (timeout > 0) {
-           request.timeout(timeout, timeoutUnit);
+           request.setTimeout(timeoutUnit.toMillis(timeout));
         }
         return new JettyClientHttpRequest(httpClient, request);
     }

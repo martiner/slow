@@ -14,7 +14,7 @@ import static slowserver.Server.PORT;
 
 public class JettyClientTemplate {
 
-    private static final long TIMEOUT = SECONDS.toMillis(10);
+    private static final int TIMEOUT = (int) SECONDS.toMillis(10);
 
     public static void main(String... args) throws Exception {
         HttpClient httpClient = new HttpClient(new SslContextFactory());

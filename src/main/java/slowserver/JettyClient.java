@@ -14,7 +14,7 @@ public class JettyClient {
     public static void main(String... args) throws Exception {
         HttpClient httpClient = new HttpClient();
         httpClient.start();
-        System.out.println("Done: " + httpClient.newRequest(URI).timeout(10, TimeUnit.SECONDS).send());
+        //System.out.println("Done: " + httpClient.newRequest(URI).timeout(10, TimeUnit.SECONDS).send());
         httpClient.stop();
     }
 }
