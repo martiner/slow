@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
- */
 package slowserver;
 
 import org.eclipse.jetty.client.HttpClient;

@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
- */
 package slowserver.jetty;
 
 import org.eclipse.jetty.client.api.ContentResponse;
@@ -49,7 +46,7 @@ public class JettyClientHttpResponse extends AbstractClientHttpResponse {
     public HttpHeaders getHeaders() {
         final HttpHeaders headers = new HttpHeaders();
         for (final HttpField header: response.getHeaders()) {
-            headers.put(header.getName(), singletonList(header.getValue())); // todo multivalue headers
+            headers.add(header.getName(), header.getValue());
         }
         return headers;
     }

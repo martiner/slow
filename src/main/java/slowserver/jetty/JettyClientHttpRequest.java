@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
- */
 package slowserver.jetty;
 
 import org.eclipse.jetty.client.HttpClient;
@@ -15,18 +12,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.springframework.util.Assert.notNull;
 
-/**
- */
+
 public class JettyClientHttpRequest extends AbstractClientHttpRequest {
 
-    // todo test request with body
-    private ByteArrayOutputStream bufferedOutput = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream bufferedOutput = new ByteArrayOutputStream();
 
     private final Request request;
 
@@ -54,6 +50,11 @@ public class JettyClientHttpRequest extends AbstractClientHttpRequest {
     @Override
     protected ClientHttpResponse executeInternal(final HttpHeaders headers) throws IOException {
         try {
+            for (Map.Entry<String, List<String>> entry: headers.entrySet()) {
+                for (String headerValue : entry.getValue()) {
+                    request.header(entry.getKey(), headerValue);
+                }
+            }
             request.content(new BytesContentProvider(bufferedOutput.toByteArray()));
             return new JettyClientHttpResponse(request.send());
         } catch (InterruptedException e) {

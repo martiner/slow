@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
- */
 package slowserver.jetty;
 
 import org.eclipse.jetty.client.HttpClient;
@@ -32,12 +29,16 @@ public class JettyClientHttpRequestFactory implements ClientHttpRequestFactory, 
 
     @Override
     public ClientHttpRequest createRequest(final URI uri, final HttpMethod httpMethod) throws IOException {
-        final Request request = httpClient.newRequest(uri)
-                .method(httpMethod.toString());
+        final Request request = httpClient.newRequest(uri);
+        request.method(httpMethod.toString());
         if (timeout > 0) {
            request.timeout(timeout, timeoutUnit);
         }
+        postProcessHttpRequest(request);
         return new JettyClientHttpRequest(httpClient, request);
+    }
+
+    protected void postProcessHttpRequest(final Request request) {
     }
 
     public void setTimeoutUnit(final String timeoutUnit) {
@@ -50,12 +51,12 @@ public class JettyClientHttpRequestFactory implements ClientHttpRequestFactory, 
     }
 
     @Override
-    public void destroy() throws Exception {
-        httpClient.destroy();
+    public void afterPropertiesSet() throws Exception {
+        httpClient.start();
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        httpClient.start();
+    public void destroy() throws Exception {
+        httpClient.destroy();
     }
 }
