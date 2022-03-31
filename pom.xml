@@ -11,7 +11,7 @@
         <targetJdk>1.7</targetJdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <http.client4.version>4.5.10</http.client4.version>
-        <spring.version>3.2.5.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
     </properties>
 
